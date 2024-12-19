@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link th:href="@{/bootstrap/bootstrap-5.3.3-dist/css/bootstrap.min.css}" rel="stylesheet">
+    <style>
+        .container {
+            padding: 80px;
+            /* border: 10px solid red; */
+            min-height: 100dvh;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card {
+            /* Ensure the card respects the container padding and fits in viewport */
+            flex-grow: 1;
+            position:relative;
+        }
+
+        .toast{
+        position:absolute;
+        bottom:10%;
+        left:50%;
+        transform:translateX(-50%);
+        }
+
+        .errTxt{
+        margin:5px;
+        }
+
+        @media(max-width:755px){
+         .card-header h4, .form-label, .form-control{
+        font-size: 0.8rem;
+        }
+        .errTxt{
+        font-size: 0.45rem;
+        }
+
+        }
+    </style>
+</head>
+
+<body>
+    <form method="POST" role="form" th:action="@{/createEmp/save}" th:object="${employee_dto}">
+        <div class="container d-flex justify-content-center align-items-start col-lg-12">
+            <div class="card bg-transparent col-lg-11 col-md-11 col-sm-12 d-flex">
+                <div class="card-header text-center d-flex align-items-center justify-content-start">
+                   <a th:href="@{/}">
+                    <img th:src="@{/images/house-fill.svg}" class="col-lg-1" style="width: 20px; height: 20px;">
+                   </a>
+                    <h4 class="text-center flex-grow-1">ADD NEW PRODUCT</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="mb-3 col-lg-4 col-md-4 col-sm-4">
+                            <label for="empName" class="form-label">Employee Name</label>
+                            <input type="text" class="form-control" id="empName" placeholder="Employee Name" th:field="*{empName}">
+                            <p th:errors="*{empName}" class="text-danger errTxt"
+                               th:if="${#fields.hasErrors('empName')}"></p>
+                            <!-- Display custom error message if present -->
+                            <p th:if="${errorMessage}" class="text-danger errTxt"
+                                th:text="${errorMessage}"> </p>
+
+                        </div>
+                        <div class="mb-3 col-lg-4 col-md-4 col-sm-4">
+                            <label for="empMail" class="form-label">Employee Email</label>
+                            <input type="email" class="form-control" id="empMail" placeholder="Employee mail ID"
+                                th:field="*{empEmail}">
+                            <p th:errors="*{empEmail}" class="text-danger errTxt"
+                               th:if="${#fields.hasErrors('empEmail')}"></p>
+                        </div>
+                        <div class="mb-3 col-lg-4 col-md-4 col-sm-4">
+                            <label for="EmpLoc" class="form-label">Employee Location</label>
+                            <input type="text" class="form-control" id="EmpLoc" placeholder="Location..."
+                                th:field="*{empLocation}">
+                            <p th:errors="*{empLocation}" class="text-danger errTxt"
+                               th:if="${#fields.hasErrors('empLocation')}"></p>
+
+                        </div>
+                    </div>
+
+                    <div class="row p-1">
+                        <button type="submit" class="btn btn-success">Create Employee</button>
+                    </div>
+
+<!--                    &lt;!&ndash; Flexbox container for aligning the toasts &ndash;&gt;-->
+<!--                    <div th:if="${param.succuess}" aria-live="polite" aria-atomic="true"-->
+<!--                         class="d-flex justify-content-center align-items-center w-100">-->
+
+                        <!-- Then put toasts within -->
+                        <div th:if="${param.success}" id="liveToast" class="toast bg-primary text-white" role="alert" aria-live="assertive" aria-atomic="true">
+                            <div class="toast-body text-center">
+                                Employee created Successfully.
+                            </div>
+                        </div>
+<!--                    </div>-->
+            </div>
+        </div>
+        </div>
+    </form>
+    <script th:src="@{/bootstrap/bootstrap-5.3.3-dist/js/bootstrap.js}"></script>
+    <script>
+        // Automatically show the toast if it exists in the DOM
+        const toastTrigger = document.getElementById('liveToast');
+        if (toastTrigger) {
+            const toast = new bootstrap.Toast(toastTrigger);
+            toast.show();
+        }
+    </script>
+</body>
+
+</html>
